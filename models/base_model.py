@@ -28,14 +28,26 @@ class BaseModel:
         returns a dictionary containing all keys/values of __dict__ of the instance
     '''
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         '''
         Constructs all the neccesary attributes for the BaseModel
         Object
+
+        Parameters
+        ----------
+        args : not used
+        kwargs : dictionary of keyword arguments
         '''
-        self.id = uuid4().__str__()
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if len(kwargs):
+            for key in kwargs:
+                value = kwargs[key]
+                if key != "__class__" : self.__setattr__(key, value) 
+                if key in ["created_at", "updated_at"] :
+                    self.__setattr__(key, datetime.fromisoformat(value))
+        else:
+            self.id = uuid4().__str__()
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
     def __str__(self):
         " Returns the string representation of an instance of the Base Model class "
