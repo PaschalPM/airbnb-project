@@ -21,12 +21,17 @@ class BaseModel:
     updated_at : datetime - current datetime when a new instance is created and it 
                  will be updated every time an instance of the base model changes
 
-    Methods
+    Public Instance Methods
     -------
     save():
         updates the public instance attribute updated_at with the current datetime
     to_dict():
         returns a dictionary containing all keys/values of __dict__ of the instance
+
+    Public Class Methods
+    --------------------
+    all() :
+        get all records of a Model's class
     '''
 
     def __init__(self, *args, **kwargs):
@@ -70,3 +75,17 @@ class BaseModel:
         dict_copy["created_at"] = datetime.isoformat(self.created_at)
         dict_copy["updated_at"] = datetime.isoformat(self.updated_at)
         return dict_copy
+
+    @classmethod
+    def all(cls):
+        " Returns a list of all instances of selected class model "
+        all = m.storage.all()
+        data_list = []
+        cls_name = cls.__name__
+   
+        for  cls_name_id_key in all:
+            
+            if cls_name_id_key.startswith(cls_name):
+                data_list.append(all[cls_name_id_key].__str__())
+        
+        return data_list

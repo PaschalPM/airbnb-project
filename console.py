@@ -153,10 +153,7 @@ class HBNBCommand(cmd.Cmd):
         elif line not in HBNBCommand.__class_set:
             print("** class doesn't exist **")
         else:
-            for key in all_records:
-                if all_records[key].__class__.__name__ == line:
-                    data_list.append(all_records[key].__str__())
-            print(data_list)
+            print(globals()[line].all())
     
     def do_update(self, line):
         " update <class name> <id> <attribute name> '<attribute value>'"
@@ -183,7 +180,30 @@ class HBNBCommand(cmd.Cmd):
 
         HBNBCommand.__validate_n_run(exec_update, line)
 
+    @staticmethod
+    def default_parser(line):
+        pattern = "^(?P<cls_name>[a-zA-Z]+)\.(?P<method_name>[a-zA-Z]+)\((?P<args>.*)\)"
 
+        test = re.match(pattern, line)
+        if test:
+            return [test.group("cls_name"), test.group("method_name"), test.group("args")]
+        
+        return None
+
+    def default(self, line):
+        parsed_line = HBNBCommand.default_parser(line)
+        
+        if parsed_line:
+            [cls_name, method_name, args] = parsed_line
+            
+            if cls_name in HBNBCommand.__class_set:
+                cls_obj = globals()[cls_name]
+                if (hasattr(cls_obj, method_name)):
+                    method_obj = getattr(cls_obj, method_name)
+                    if (callable(method_obj)):
+                        print(method_obj())
+        else:
+            print("*** Unknkow syntax: "+line)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
