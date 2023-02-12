@@ -5,7 +5,11 @@ import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
-
+from models.amenity import Amenity
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     " The Command Interface class which inherits the Cmd class "
@@ -77,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
                         print("** no instance found **")
                     else:
                         command(cls_name_id_key) #execute show & destroy
-            else:
+            elif len(line_args) <= 4:
                 if command_name == "exec_update":
                     command(line_args)
 
@@ -131,6 +135,14 @@ class HBNBCommand(cmd.Cmd):
         HBNBCommand.__validate_n_run(exec_destroy, line)
 
     def do_all(self, line):
+        '''
+        Prints all string representation of all instances based or not on the class name
+
+        Parameters
+        ---------
+        line : str - Name of Class (Optional)
+
+        '''
         data_list = []
         all_records = HBNBCommand.__all_records
 
@@ -163,8 +175,11 @@ class HBNBCommand(cmd.Cmd):
                 selected_record = all_records[cls_name_id_key]
 
                 if attr_name not in ["id", "created_at", "updated_at"]:
-                    selected_record.__setattr__(attr_name, eval(attr_value))
-                    selected_record.save()
+                    try:
+                        selected_record.__setattr__(attr_name, eval(attr_value))
+                        selected_record.save()
+                    except Exception as e:
+                        print(str(e))
 
         HBNBCommand.__validate_n_run(exec_update, line)
 

@@ -70,6 +70,12 @@ class FileStorage:
         exists ; otherwise, do nothing. If the file doesn’t exist, no exception should be raised)
         '''
         from ..base_model import BaseModel
+        from ..user import User
+        from ..amenity import Amenity
+        from ..city import City
+        from ..place import Place
+        from ..review import Review
+        from ..state import State
 
         if os.path.exists(FileStorage.__file_path):
             with open(FileStorage.__file_path, "r") as fp:
@@ -78,4 +84,4 @@ class FileStorage:
 
                 for cls_name_id_key in dict_data:
                     record = dict_data[cls_name_id_key]
-                    FileStorage.__objects[cls_name_id_key] = bm.BaseModel(**record)
+                    FileStorage.__objects[cls_name_id_key] = locals()[record["__class__"]](**record)
