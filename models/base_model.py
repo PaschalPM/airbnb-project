@@ -89,3 +89,8 @@ class BaseModel:
                 data_list.append(all[cls_name_id_key].__str__())
         
         return data_list
+    
+    @classmethod
+    def count(cls):
+        " Returns number of instances of selected class model "
+        return len(cls.all())
