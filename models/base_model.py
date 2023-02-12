@@ -97,10 +97,18 @@ class BaseModel:
 
     @classmethod
     def show(cls, id):
-        " Returns a single instance retrived by id of selected class model "
+        '''
+        Returns a single instance retrived by id of selected class model
+
+        Returns
+        -------
+            int(1) : Error(** instance id missing **)
+            int(2) : Error(** no instance found **)
+            object : Success (selected instance)
+        '''
         
         if not id:
-            return ("** instance id missing **")
+            return (1)
     
         cls_name_id_key = cls.__name__+"."+id
         all = m.storage.all()
@@ -108,4 +116,28 @@ class BaseModel:
         if cls_name_id_key in all:
             return all[cls_name_id_key]
         else: 
-            return("** no instance found **")
+            return(2)
+
+    @classmethod
+    def destroy(cls, id):
+        '''
+        Destroys a single instance retrived from the selected class model by id
+
+        Returns
+        -------
+            int(1) : Error(** instance id missing **)
+            int(2) : Error(** no instance found **)
+            None : Success
+        '''
+        
+        if not id:
+            return (1)
+
+        key_to_del = cls.__name__+"."+id
+        all = m.storage.all()
+
+        if key_to_del in all:
+            all.pop(key_to_del)
+            m.storage.save()
+        else: 
+            return(2)

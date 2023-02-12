@@ -202,9 +202,19 @@ class HBNBCommand(cmd.Cmd):
 
                 if method_name in ["all", "count"]:
                     print(getattr(cls_obj, method_name)())
-                elif method_name == "show" and len(args_list) == 1:
-                    id = args.strip('"')
-                    print(getattr(cls_obj, method_name)(id))                        
+                
+                elif method_name in ["show", "destroy"] and len(args_list) == 1:
+                    id = args.strip('"') 
+                    called_method =  getattr(cls_obj, method_name)(id) # destroy method (automatically if successful)
+                    
+                    if called_method == 1:
+                        print("** instance id missing **")
+                    elif called_method == 2:
+                        print("** no instance found **")
+                    else:
+                        if method_name == "show":
+                            print(called_method)    # show method
+                                        
         else:
             print("*** Unknown syntax: "+line)
 
