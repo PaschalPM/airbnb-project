@@ -190,6 +190,30 @@ class HBNBCommand(cmd.Cmd):
         
         return None
 
+    @staticmethod
+    def args_update_parser(args_list):
+        _list = [None] * 3
+        [id, *rest] = args_list
+        attr_name = ""
+        attr_value = ""
+        id =  id.strip("'\"")
+        _list[0] = id
+
+        if len(rest) == 2:
+            [attr_name, attr_value] = rest
+            attr_name =  attr_name.strip("'\" ")
+            attr_value = attr_value.strip(" ")
+        
+        elif len(rest) == 1:
+            arg2 = rest[0]
+            [attr_name, attr_value] = arg2.split(":")
+            attr_name = attr_name.strip("{'\" ")
+            attr_value = attr_value.strip("} ")
+            
+        _list[1] = attr_name
+        _list[2] = attr_value
+        return _list
+    
     def default(self, line):
         parsed_line = HBNBCommand.default_parser(line)
         
@@ -214,7 +238,9 @@ class HBNBCommand(cmd.Cmd):
                     else:
                         if method_name == "show":
                             print(called_method)    # show method
-                                        
+                elif method_name == "update":
+                    parsed_args = HBNBCommand.args_update_parser(args_list)
+                    getattr(cls_obj, method_name)(*parsed_args)   # update method
         else:
             print("*** Unknown syntax: "+line)
 

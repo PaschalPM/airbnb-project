@@ -141,3 +141,11 @@ class BaseModel:
             m.storage.save()
         else: 
             return(2)
+
+    @classmethod
+    def update(cls, id, attr_name, attr_value):
+        cls_name_id_key = cls.__name__+"."+id
+        all = m.storage.all()
+        selected_record = all[cls_name_id_key]
+        setattr(selected_record, attr_name, eval(attr_value))
+        m.storage.save()

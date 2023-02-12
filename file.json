@@ -21,6 +21,8 @@
         "id": "ccec4e1e-36f8-4a15-828d-7dae26429af6",
         "created_at": "2023-02-12T12:22:31.459604",
         "updated_at": "2023-02-12T12:22:31.459604",
+        "name": "Mark",
+        "age": 30,
         "__class__": "State"
     },
     "State.a618f91b-0a7e-4f32-8d09-3d727c01bb98": {
