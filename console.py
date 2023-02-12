@@ -195,15 +195,18 @@ class HBNBCommand(cmd.Cmd):
         
         if parsed_line:
             [cls_name, method_name, args] = parsed_line
-            
+            args_list = args.split(",")
+
             if cls_name in HBNBCommand.__class_set:
                 cls_obj = globals()[cls_name]
-                if (hasattr(cls_obj, method_name)):
-                    method_obj = getattr(cls_obj, method_name)
-                    if (callable(method_obj)):
-                        print(method_obj())
+
+                if method_name in ["all", "count"]:
+                    print(getattr(cls_obj, method_name)())
+                elif method_name == "show" and len(args_list) == 1:
+                    id = args.strip('"')
+                    print(getattr(cls_obj, method_name)(id))                        
         else:
-            print("*** Unknkow syntax: "+line)
+            print("*** Unknown syntax: "+line)
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

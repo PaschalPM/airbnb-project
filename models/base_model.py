@@ -94,3 +94,18 @@ class BaseModel:
     def count(cls):
         " Returns number of instances of selected class model "
         return len(cls.all())
+
+    @classmethod
+    def show(cls, id):
+        " Returns a single instance retrived by id of selected class model "
+        
+        if not id:
+            return ("** instance id missing **")
+    
+        cls_name_id_key = cls.__name__+"."+id
+        all = m.storage.all()
+
+        if cls_name_id_key in all:
+            return all[cls_name_id_key]
+        else: 
+            return("** no instance found **")
